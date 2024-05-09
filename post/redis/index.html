@@ -1,0 +1,312 @@
+<!doctype html><html lang=zh-CN data-theme=dark><head><meta charset=UTF-8><meta name=viewport content="width=device-width"><meta name=theme-color content="#222" media="(prefers-color-scheme: dark)"><meta name=generator content="Hugo 0.125.6"><link rel="shortcut icon" type=image/x-icon href=/imgs/icons/favicon.ico><link rel=icon type=image/x-icon href=/imgs/icons/favicon.ico><link rel=icon type=image/png sizes=16x16 href=/imgs/icons/favicon_16x16_next.png><link rel=icon type=image/png sizes=32x32 href=/imgs/icons/favicon_32_32_next.png><link rel=apple-touch-icon sizes=180x180 href=/imgs/icons/apple_touch_icon_next.png><meta itemprop=name content="Redis学习笔记"><meta itemprop=description content="Redis学习笔记"><meta itemprop=datePublished zgotmplz><meta itemprop=dateModified zgotmplz><meta itemprop=image content="https://infinitejk.github.io/imgs/avatar.png"><meta itemprop=keywords content="java"><meta property="og:type" content="article"><meta property="og:title" content="Redis学习笔记"><meta property="og:description" content="Redis学习笔记"><meta property="og:image" content="/imgs/avatar.png"><meta property="og:image:width" content="312"><meta property="og:image:height" content="312"><meta property="og:image:type" content="image/jpeg/png/svg/jpg"><meta property="og:url" content="https://infinitejk.github.io/post/redis/"><meta property="og:site_name" content="infiniteJKのBlog"><meta property="og:locale" content="zh-CN"><meta property="article:author" content="infiniteJK"><meta property="article:published_time" content="2024-05-08 11:52:18 +0800 CST"><meta property="article:modified_time" content="2024-05-08 11:52:18 +0800 CST"><link type=text/css rel=stylesheet href=https://cdn.staticfile.org/font-awesome/6.1.2/css/all.min.css><link type=text/css rel=stylesheet href=https://cdn.staticfile.org/animate.css/3.1.1/animate.min.css><link type=text/css rel=stylesheet href=https://cdn.staticfile.org/viewerjs/1.11.0/viewer.min.css><link rel=stylesheet href=/css/main.min.ff5358e101ab82ec794f45d2098d2c4ffcc8f07f2a73d9524fbc39dc6612ec3f.css><script type=text/javascript>(function(){localDB={set:function(e,t,n){if(n===0)return;const s=new Date,o=n*864e5,i={value:t,expiry:s.getTime()+o};localStorage.setItem(e,JSON.stringify(i))},get:function(e){const t=localStorage.getItem(e);if(!t)return void 0;const n=JSON.parse(t),s=new Date;return s.getTime()>n.expiry?(localStorage.removeItem(e),void 0):n.value}},theme={active:function(){const e=localDB.get("theme");if(e==null)return;theme.toggle(e),window.matchMedia("(prefers-color-scheme: dark)").addListener(function(e){theme.toggle(e.matches?"dark":"light")})},toggle:function(e){document.documentElement.setAttribute("data-theme",e),localDB.set("theme",e,2);const t=document.querySelector("iframe.giscus-frame");if(t){const n={setConfig:{theme:e}};t.contentWindow.postMessage({giscus:n},"https://giscus.app")}}},theme.active()})(window)</script><script class=next-config data-name=page type=application/json>{"comments":false,"isHome":false,"isPage":true,"path":"redis","permalink":"https://infinitejk.github.io/post/redis/","title":"Redis学习笔记","waline":{"js":[{"alias":"waline","alias_name":"@waline/client","file":"dist/pageview.js","name":"pageview","version":"2.13.0"},{"alias":"waline","alias_name":"@waline/client","file":"dist/comment.js","name":"comment","version":"2.13.0"}]}}</script><script type=text/javascript>document.addEventListener("DOMContentLoaded",()=>{var e=document.createElement("script");e.charset="UTF-8",e.src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js",e.async=!1,e.defer=!0,document.head.appendChild(e),e.onload=function(){NexT.utils.fmtBusuanzi()}})</script><title>Redis学习笔记 - infiniteJKのBlog</title><noscript><link rel=stylesheet href=/css/noscript.css></noscript></head><body itemscope itemtype=http://schema.org/WebPage class=use-motion><div class=headband></div><main class=main><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=header-inner><div class=site-brand-container><div class=site-nav-toggle><div class=toggle aria-label role=button><span class=toggle-line></span>
+<span class=toggle-line></span>
+<span class=toggle-line></span></div></div><div class=site-meta><a href=/ class=brand rel=start><i class=logo-line></i><h1 class=site-title>infiniteJKのBlog</h1><i class=logo-line></i></a><p class=site-subtitle itemprop=description>热爱生活，分享经历</p></div><div class=site-nav-right><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class=site-nav><ul class="main-menu menu"><li class="menu-item menu-item-home"><a href=/ class=hvr-icon-pulse rel=section><i class="fa fa-home hvr-icon"></i>首页</a></li><li class="menu-item menu-item-about"><a href=/about.html class=hvr-icon-pulse rel=section><i class="fa fa-user hvr-icon"></i>关于</a></li><li class="menu-item menu-item-flinks"><a href=/flinks.html class=hvr-icon-pulse rel=section><i class="fa fa-thumbs-up hvr-icon"></i>站点示例</a></li><li class="menu-item menu-item-archives"><a href=/archives/ class=hvr-icon-pulse rel=section><i class="fa fa-archive hvr-icon"></i>归档
+<span class=badge>14</span></a></li><li class="menu-item menu-item-commonweal"><a href=/404.html class=hvr-icon-pulse rel=section><i class="fa fa-heartbeat hvr-icon"></i>公益 404</a></li><li class="menu-item menu-item-search"><a role=button class="popup-trigger hvr-icon-pulse"><i class="fa fa-search fa-fw hvr-icon"></i>搜索</a></li></ul></nav><div class=search-pop-overlay><div class="popup search-popup"><div class=search-header><span class=search-icon><i class="fa fa-search"></i></span><div class=search-input-container><input autocomplete=off autocapitalize=off maxlength=80 placeholder=搜索... spellcheck=false type=search class=search-input></div><span class=popup-btn-close role=button><i class="fa fa-times-circle"></i></span></div><div class="search-result-container no-result"><div class=search-result-icon><i class="fa fa-spinner fa-pulse fa-5x"></i></div></div></div></div></div><div class="toggle sidebar-toggle" role=button><span class=toggle-line></span>
+<span class=toggle-line></span>
+<span class=toggle-line></span></div><aside class=sidebar><div class="sidebar-inner sidebar-nav-active sidebar-toc-active"><ul class=sidebar-nav><li class=sidebar-nav-toc>文章目录</li><li class=sidebar-nav-overview>站点概览</li></ul><div class=sidebar-panel-container><div class="post-toc-wrap sidebar-panel"><div class="post-toc animated"><nav id=TableOfContents><ul><li><ul><li><a href=#linux-下安装-redis>linux 下安装 Redis</a></li><li><a href=#性能测试工具>性能测试工具</a></li><li><a href=#基础知识>基础知识</a></li><li><a href=#五大数据类型>五大数据类型</a><ul><li><a href=#string>String</a></li><li><a href=#list>List</a></li><li><a href=#set>set</a></li><li><a href=#hash>hash</a></li><li><a href=#zset有序集合>Zset(有序集合)</a></li></ul></li><li><a href=#三种特殊数据类型>三种特殊数据类型</a><ul><li><a href=#geospatial-地理位置>geospatial 地理位置</a></li><li><a href=#hyperloglog>hyperloglog</a></li><li><a href=#bitmap-位存储只有-0-和-1>bitmap 位存储（只有 0 和 1）</a></li></ul></li><li><a href=#事务>事务</a><ul><li><a href=#使用事务的步骤>使用事务的步骤</a></li><li><a href=#redis-实现乐观锁>redis 实现乐观锁</a></li></ul></li><li><a href=#jedis>Jedis</a><ul><li><a href=#导入-jedis-的包>导入 jedis 的包</a></li><li><a href=#连接远程数据库>连接远程数据库</a></li></ul></li><li><a href=#整合-springboot>整合 springboot</a></li><li><a href=#redisconf-详解>Redis.conf 详解</a></li><li><a href=#redis-持久化策略>Redis 持久化策略</a><ul><li></li></ul></li><li><a href=#redis发布订阅>Redis发布订阅</a><ul><li><a href=#订阅端>订阅端</a></li><li><a href=#发布端>发布端</a></li></ul></li><li><a href=#redis主从复制>Redis主从复制</a><ul><li><a href=#主从复制的作用>主从复制的作用</a></li><li><a href=#环境配置>环境配置</a></li><li><a href=#一主二从>一主二从</a></li><li><a href=#哨兵模式自动选举老大>哨兵模式（自动选举老大）</a></li></ul></li><li><a href=#redis缓存穿透和雪崩>Redis缓存穿透和雪崩</a><ul><li><a href=#缓存穿透查不到>缓存穿透（查不到）</a></li><li><a href=#缓存击穿量太大缓存过期>缓存击穿（量太大，缓存过期）</a></li><li><a href=#缓存雪崩缓存集中过期失效redis宕机>缓存雪崩（缓存集中过期失效，redis宕机）</a></li></ul></li></ul></li></ul></nav></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author site-overview-item animated" itemprop=author itemscope itemtype=http://schema.org/Person><img class=site-author-image itemprop=image alt=infiniteJK src=/imgs/img-lazy-loading.gif data-src=/imgs/avatar.png><p class=site-author-name itemprop=name>infiniteJK</p><div class=site-description itemprop=description>记录学习，生活，工作中的奇妙旅程</div></div><div class="site-state-wrap site-overview-item animated"><nav class=site-state><div class="site-state-item site-state-posts"><a href=/archives/><span class=site-state-item-count>14</span>
+<span class=site-state-item-name>日志</span></a></div><div class="site-state-item site-state-categories"><a href=/categories/><span class=site-state-item-count>6</span>
+<span class=site-state-item-name>分类</span></a></div><div class="site-state-item site-state-tags"><a href=/tags/><span class=site-state-item-count>7</span>
+<span class=site-state-item-name>标签</span></a></div></nav></div><div class="links-of-social site-overview-item animated"><span class=links-of-social-item><a href=https://github.com/infinitejk title="Github → https://github.com/infinitejk" rel=noopener class=hvr-icon-pulse target=_blank><i class="fab fa-github fa-fw hvr-icon"></i>
+Github
+</a></span><span class=links-of-social-item><a href=https://www.zhihu.com/people/wu-sheng-36-78-46 title="知乎 → https://www.zhihu.com/people/wu-sheng-36-78-46" rel=noopener class=hvr-icon-pulse target=_blank><i class="fa fa-book fa-fw hvr-icon"></i>
+知乎</a></span></div><div class="cc-license animated" itemprop=license><a href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh class=cc-opacity rel=noopener target=_blank title=共享知识><img src=/imgs/img-lazy-loading.gif data-src=/imgs/cc/big/by_nc_sa.svg alt=共享知识></a></div><div class="links-of-blogroll site-overview-item animated"><div class=links-of-blogroll-title><i class="fa fa-globe fa-fw"></i>
+友情链接</div><ul class=links-of-blogroll-list><li class=links-of-blogroll-item><a href=https://gitee.com/hugo-next/hugo-theme-next title=https://gitee.com/hugo-next/hugo-theme-next target=_blank>Hugo-NexT</a></li><li class=links-of-blogroll-item><a href=https://lisenhui.cn title=https://lisenhui.cn target=_blank>凡梦星尘空间站</a></li></ul></div></div></div></div></aside><div class=sidebar-dimmer></div></header><div class=tool-buttons><div id=goto-gtranslate class=button title=多语言翻译><i class="fas fa-globe"></i></div><div id=toggle-theme class=button title=深浅模式切换><i class="fas fa-adjust"></i></div><div class=back-to-top role=button title=返回顶部><i class="fa fa-arrow-up"></i>
+<span>0%</span></div></div><div class=reading-progress-bar></div><a role=button class="book-mark-link book-mark-link-fixed"></a><a href=https://github.com/infinitejk/ rel="noopener external nofollow noreferrer" target=_blank title="Follow me on GitHub" class="exturl github-corner"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0 0 115 115h15l12 27L250 250V0z"/><path d="M128.3 109C113.8 99.7 119 89.6 119 89.6 122 82.7 120.5 78.6 120.5 78.6 119.2 72 123.4 76.3 123.4 76.3 127.3 80.9 125.5 87.3 125.5 87.3 122.9 97.6 130.6 101.9 134.4 103.2" fill="currentcolor" style="transform-origin:130px 106px" class="octo-arm"/><path d="M115 115C114.9 115.1 118.7 116.5 119.8 115.4l13.9-13.8C136.9 99.2 139.9 98.4 142.2 98.6 133.8 88 127.5 74.4 143.8 58 148.5 53.4 154 51.2 159.7 51 160.3 49.4 163.2 43.6 171.4 40.1 171.4 40.1 176.1 42.5 178.8 56.2 183.1 58.6 187.2 61.8 190.9 65.4 194.5 69 197.7 73.2 200.1 77.6 213.8 80.2 216.3 84.9 216.3 84.9 212.7 93.1 206.9 96 205.4 96.6 205.1 102.4 203 107.8 198.3 112.5 181.9 128.9 168.3 122.5 157.7 114.1 157.9 116.9 156.7 120.9 152.7 124.9L141 136.5C139.8 137.7 141.6 141.9 141.8 141.8z" fill="currentcolor" class="octo-body"/></svg>
+</a><script type=text/javascript src=//sidecar.gitter.im/dist/sidecar.v1.js async></script><script type=text/javascript>((window.gitter={}).chat={}).options={room:"hugo-next/community"}</script><noscript><div class=noscript-warning>Theme NexT works best with JavaScript enabled</div></noscript><div class="main-inner post posts-expand"><div class=post-block><article itemscope itemtype=http://schema.org/Article class=post-content lang><link itemprop=mainEntityOfPage href=https://infinitejk.github.io/post/redis/><span hidden itemprop=author itemscope itemtype=http://schema.org/Person><meta itemprop=image content="/imgs/avatar.png"><meta itemprop=name content="infiniteJK"></span><span hidden itemprop=publisher itemscope itemtype=http://schema.org/Organization><meta itemprop=name content="infiniteJK"><meta itemprop=description content="记录学习，生活，工作中的奇妙旅程"></span><span hidden itemprop=post itemscope itemtype=http://schema.org/CreativeWork><meta itemprop=name content="Redis学习笔记"><meta itemprop=description content="Redis学习笔记"></span><header class=post-header><h1 class=post-title itemprop="name headline">Redis学习笔记
+<a href=https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/post/Redis.md rel="noopener external nofollow noreferrer" target=_blank class="exturl post-edit-link" title=编辑><i class="fa fa-pen-nib"></i></a></h1><div class=post-meta-container><div class=post-meta-items><span class=post-meta-item><span class=post-meta-item-icon><i class="far fa-calendar"></i>
+</span><span class=post-meta-item-text title=发表于>发表于：
+</span><time title="创建时间：2024-05-08 11:52:18 +0800 CST" itemprop="dateCreated datePublished" datetime="2024-05-08 11:52:18 +0800 CST">2024-05-08
+</time></span><span class=post-meta-item><span class=post-meta-item-icon><i class="far fa-folder-open"></i>
+</span><span class=post-meta-item-text title=分类于>分类于：
+</span><span itemprop=about itemscope itemtype=http://schema.org/Thing><a href=/categories/%E6%8A%80%E6%9C%AF itemprop=url rel=index><span itemprop=name>技术</span></a></span></span></div><div class=post-meta-items><span class=post-meta-item title=字数><span class=post-meta-item-icon><i class="far fa-file-word"></i>
+</span><span class=post-meta-item-text>字数：</span>
+<span>820</span>
+</span><span class=post-meta-item title=阅读><span class=post-meta-item-icon><i class="far fa-clock"></i>
+</span><span class=post-meta-item-text>阅读：&ap;</span>
+<span>4分钟</span>
+</span><span class=post-meta-item title=浏览><span class=post-meta-item-icon><i class="far fa-eye"></i>
+</span><span class=post-meta-item-text>浏览：
+</span><span id=busuanzi_value_page_pv data-path=/post/redis/><i class="fa fa-sync fa-spin"></i></span></span></div></div></header><div class="post-body autonumber" itemprop=articleBody><h3 id=linux-下安装-redis>linux 下安装 Redis
+<a class=header-anchor href=#linux-%e4%b8%8b%e5%ae%89%e8%a3%85-redis></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># 上传压缩包。移动到 /opt目录下并解压</span>
+</span></span><span style=display:flex><span>1. 移动 mv redis-6.0.6.tar.gz /opt/
+</span></span><span style=display:flex><span>2. 解压  tar zxvf redis-6.0.6.tar.gz
+</span></span><span style=display:flex><span>3. 编译，需要安装gcc-c++环境  yum install gcc-c++
+</span></span><span style=display:flex><span>（ubuntu下安装 apt install build-essential ）
+</span></span><span style=display:flex><span>4. make 命令 编译redis 完成后在make一次 ，最后make install 安装
+</span></span><span style=display:flex><span>5. redis的默认安装路径 /usr/local/bin
+</span></span><span style=display:flex><span>6. 新建一个目录，将配置文件拷贝过来
+</span></span><span style=display:flex><span>mkdir myconfig
+</span></span><span style=display:flex><span>cp /opt/redis-6.0.6/redis.conf myconfig
+</span></span><span style=display:flex><span>7. redis默认不是后台启动的，要进行修改
+</span></span><span style=display:flex><span>vim 打开redis.conf 将daemonize no改为yes,保存，退出
+</span></span><span style=display:flex><span>8. 通过指定的配置文件启动 redis-server myconfig/redis.conf
+</span></span><span style=display:flex><span>9. 使用客户端进行连接 redis-cli -p <span style=color:#ae81ff>6379</span>
+</span></span><span style=display:flex><span>10.关闭redis   shutdown
+</span></span></code></pre></div><h3 id=性能测试工具>性能测试工具
+<a class=header-anchor href=#%e6%80%a7%e8%83%bd%e6%b5%8b%e8%af%95%e5%b7%a5%e5%85%b7></a></h3><p>redis-benchmark
+<code>redis-benchmark -h localhost -p 6379 -c 100 -n 100000</code></p><h3 id=基础知识>基础知识
+<a class=header-anchor href=#%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86></a></h3><p>16 个数据库
+set key value 时出现问题，MISCONF Redis is configured to save RDB snapshots, but it is currently not able to persist on disk
+解决：将 stop-writes-on-bgsave-error 值设置为 no</p><h3 id=五大数据类型>五大数据类型
+<a class=header-anchor href=#%e4%ba%94%e5%a4%a7%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b></a></h3><h4 id=string>String
+<a class=header-anchor href=#string></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>incr
+</span></span><span style=display:flex><span>decr
+</span></span><span style=display:flex><span>incrby
+</span></span><span style=display:flex><span>decrby
+</span></span><span style=display:flex><span>set
+</span></span><span style=display:flex><span>get
+</span></span><span style=display:flex><span>setex
+</span></span><span style=display:flex><span>Expire key second :设置当前key的过期时间
+</span></span><span style=display:flex><span>setnx
+</span></span><span style=display:flex><span>mset
+</span></span><span style=display:flex><span>mget
+</span></span><span style=display:flex><span>ttl: 查看过期剩余时间
+</span></span><span style=display:flex><span>msetnx 原子性
+</span></span><span style=display:flex><span>getset
+</span></span></code></pre></div><h4 id=list>List
+<a class=header-anchor href=#list></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>Lpush list <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>Rpush list <span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Lpop
+</span></span><span style=display:flex><span>Rpop
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>lrange list <span style=color:#ae81ff>0</span> -1
+</span></span><span style=display:flex><span>lindex list <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Llen list
+</span></span><span style=display:flex><span>lrem list count key 移除指定数量的key
+</span></span><span style=display:flex><span>ltrim list start stop 通过下标截取
+</span></span><span style=display:flex><span>rpoplpush 移除最后一个元素，添加到新的list
+</span></span><span style=display:flex><span>lset list index key 更新列表中指定下标的值
+</span></span><span style=display:flex><span>linsert 插入
+</span></span></code></pre></div><h4 id=set>set
+<a class=header-anchor href=#set></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>sadd set hello  添加元素
+</span></span><span style=display:flex><span>smembers set 取值
+</span></span><span style=display:flex><span>sismember set key 判断key是否是set中元素
+</span></span><span style=display:flex><span>scard set 查看set的长度
+</span></span><span style=display:flex><span>srem set key 移除set集合中的指定元素
+</span></span><span style=display:flex><span>srandmember set count 随机抽出指定个数的元素
+</span></span><span style=display:flex><span>spop set 随机删除一个元素
+</span></span><span style=display:flex><span>smove set set1 key 向指定集合移动元素
+</span></span><span style=display:flex><span>sdiff set set1 差集
+</span></span><span style=display:flex><span>sinter set set1 交集 <span style=color:#75715e>#共同好友</span>
+</span></span><span style=display:flex><span>sunion set set1 并集
+</span></span></code></pre></div><h4 id=hash>hash
+<a class=header-anchor href=#hash></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>hset myhash field value 存值
+</span></span><span style=display:flex><span>hget myhash field  取值
+</span></span><span style=display:flex><span>hmset myhash field1 hello field2 world
+</span></span><span style=display:flex><span>hmget myhash field1 field2 获取指定的key-value
+</span></span><span style=display:flex><span>hgetall myhash 获取所有的key-value
+</span></span><span style=display:flex><span>hdel myhash field1 删除指定的key
+</span></span><span style=display:flex><span>hlen myhash 获取长度
+</span></span><span style=display:flex><span>Hexists myhash field1 判断指定字段是否存在
+</span></span><span style=display:flex><span>hkeys myhash 只获取key
+</span></span><span style=display:flex><span>hvals myhash 只获取value
+</span></span><span style=display:flex><span>hincrby myhash field1 <span style=color:#ae81ff>5</span> 指定字段增量
+</span></span><span style=display:flex><span>hsetnx myhash field4 hello 不存在就创建
+</span></span><span style=display:flex><span>hset user:1 name jikai
+</span></span><span style=display:flex><span>hmset 多个值的存储
+</span></span><span style=display:flex><span>hash适合对象的存储，string适合存字符串
+</span></span></code></pre></div><h4 id=zset有序集合>Zset(有序集合)
+<a class=header-anchor href=#zset%e6%9c%89%e5%ba%8f%e9%9b%86%e5%90%88></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>zadd myset score key 添加元素，score是一个标识，用来排序
+</span></span><span style=display:flex><span>zadd myset score1 key1 score2 key 添加多个元素
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#例子</span>
+</span></span><span style=display:flex><span>zadd salary <span style=color:#ae81ff>3500</span> xiaoohong
+</span></span><span style=display:flex><span>zadd salary <span style=color:#ae81ff>500</span> xiaolan
+</span></span><span style=display:flex><span>zadd salary <span style=color:#ae81ff>1500</span> xiaohei
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>zrangebyscore salary -inf +inf 从小到大排序
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>zrangebyscore salary -inf +inf withscores 从小到大排序带成绩
+</span></span><span style=display:flex><span>zrevrangebyscore salary <span style=color:#ae81ff>0</span> -1
+</span></span><span style=display:flex><span>从大打小
+</span></span><span style=display:flex><span><span style=color:#75715e>###############################</span>
+</span></span><span style=display:flex><span>zrange salary <span style=color:#ae81ff>0</span> -1 显示所有元素
+</span></span><span style=display:flex><span>zrem salary xiaohong 移除元素
+</span></span><span style=display:flex><span>zcard salary 获取有序集合中元素的个数
+</span></span><span style=display:flex><span>zcount myset <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>3</span> 获取指定区间的成员数量
+</span></span></code></pre></div><p>排行榜应用</p><h3 id=三种特殊数据类型>三种特殊数据类型
+<a class=header-anchor href=#%e4%b8%89%e7%a7%8d%e7%89%b9%e6%ae%8a%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b></a></h3><h4 id=geospatial-地理位置>geospatial 地理位置
+<a class=header-anchor href=#geospatial-%e5%9c%b0%e7%90%86%e4%bd%8d%e7%bd%ae></a></h4><p>朋友定位，打车距离计算，推算地理位置信息</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 经度、纬度、名称</span>
+</span></span><span style=display:flex><span>geoadd china:city 116.40 39.90 beijing 添加地理位置信息
+</span></span><span style=display:flex><span>geopos china:city beijing shanghai 查询地理位置
+</span></span><span style=display:flex><span>geodist china:city beijing shanghai 两地之间的距离
+</span></span><span style=display:flex><span>georadius china:city <span style=color:#ae81ff>110</span> <span style=color:#ae81ff>30</span> <span style=color:#ae81ff>1000</span> km 指定位置和半径内的所有元素
+</span></span><span style=display:flex><span>georadius china:city <span style=color:#ae81ff>110</span> <span style=color:#ae81ff>30</span> <span style=color:#ae81ff>1000</span> km withcoord withdist count <span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span>georadiusbymember china:city beijing <span style=color:#ae81ff>100</span> km
+</span></span></code></pre></div><p>底层是 zset，可以用 zset 的命令来操作 geo</p><h4 id=hyperloglog>hyperloglog
+<a class=header-anchor href=#hyperloglog></a></h4><p>基数统计的算法 （基数：集合中不重复的元素）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>pfadd mykey a b c <span style=color:#75715e>#创建第一组元素</span>
+</span></span><span style=display:flex><span>pfcount mykey <span style=color:#75715e>#统计 mykey中基数的数量</span>
+</span></span><span style=display:flex><span>pfmerge mykey3 mykey1 mykey2 <span style=color:#75715e>#合并到mykey3</span>
+</span></span></code></pre></div><h4 id=bitmap-位存储只有-0-和-1>bitmap 位存储（只有 0 和 1）
+<a class=header-anchor href=#bitmap-%e4%bd%8d%e5%ad%98%e5%82%a8%e5%8f%aa%e6%9c%89-0-%e5%92%8c-1></a></h4><p>bitmap 位图
+统计用户信息，当只有两种状态 0 1 时可以使用</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>setbit sign <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>setbit sign <span style=color:#ae81ff>2</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>setbit sign <span style=color:#ae81ff>3</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>getbit sign <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>bitcount sign 统计为1的数量
+</span></span></code></pre></div><h3 id=事务>事务
+<a class=header-anchor href=#%e4%ba%8b%e5%8a%a1></a></h3><p>==redis 单条命令是保证原子性的，redis 的事务不保证原子性==
+==redis 没有隔离级别的概念==
+redis 事物的本质：一组命令的集合！一个事务中的所有命令都会被序列化，在事务执行过程中，会按照<strong>顺序执行</strong>
+一次性、顺序性、排他性</p><h4 id=使用事务的步骤>使用事务的步骤
+<a class=header-anchor href=#%e4%bd%bf%e7%94%a8%e4%ba%8b%e5%8a%a1%e7%9a%84%e6%ad%a5%e9%aa%a4></a></h4><blockquote><p>正常执行事务</p></blockquote><ol><li>开启事务（multi）</li><li>命令入队（。。。。）</li><li>执行事务（exec）</li></ol><p>放弃事务 <code>discard</code></p><p>编译型异常（代码有问题，命令有问题）所有命令都不会执行
+运行时异常 这一行命令不会执行，其他还是会执行</p><p>监控（watch）- 加锁</p><ul><li>悲观锁: 认为什么时候都会出问题，无论做什么全部加锁</li><li>乐观锁：默认没有问题，更新数据的时候去判断在此期间是否有人修改过数据</li><li>MySQL 获取 version,更新时比较 version</li></ul><p>解锁 （unwatch）</p><h4 id=redis-实现乐观锁>redis 实现乐观锁
+<a class=header-anchor href=#redis-%e5%ae%9e%e7%8e%b0%e4%b9%90%e8%a7%82%e9%94%81></a></h4><p>使用 watch 去实现, 监控 money 对象
+事务正常结束，数据在这期间没有发生变化
+如果有另外一个线程改变了这个数据，事务就不会正常执行，这时候先解锁，重新获取一下最新值，再次监控执行事务</p><h3 id=jedis>Jedis
+<a class=header-anchor href=#jedis></a></h3><h4 id=导入-jedis-的包>导入 jedis 的包
+<a class=header-anchor href=#%e5%af%bc%e5%85%a5-jedis-%e7%9a%84%e5%8c%85></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-xml data-lang=xml><span style=display:flex><span> <span style=color:#75715e>&lt;!--jedis--&gt;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&lt;dependency&gt;</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&lt;groupId&gt;</span>redis.clients<span style=color:#f92672>&lt;/groupId&gt;</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&lt;artifactId&gt;</span>jedis<span style=color:#f92672>&lt;/artifactId&gt;</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&lt;version&gt;</span>4.1.0<span style=color:#f92672>&lt;/version&gt;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&lt;/dependency&gt;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&lt;dependency&gt;</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&lt;groupId&gt;</span>com.alibaba<span style=color:#f92672>&lt;/groupId&gt;</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&lt;artifactId&gt;</span>fastjson<span style=color:#f92672>&lt;/artifactId&gt;</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&lt;version&gt;</span>1.2.75<span style=color:#f92672>&lt;/version&gt;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&lt;/dependency&gt;</span>
+</span></span></code></pre></div><h4 id=连接远程数据库>连接远程数据库
+<a class=header-anchor href=#%e8%bf%9e%e6%8e%a5%e8%bf%9c%e7%a8%8b%e6%95%b0%e6%8d%ae%e5%ba%93></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 配置redis.conf文件</span>
+</span></span><span style=display:flex><span>注释 bind 127.0.0.1
+</span></span><span style=display:flex><span>设置密码 requirepass <span style=color:#ae81ff>134567</span>
+</span></span><span style=display:flex><span>去掉保护模式 protected-mode no
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>防火墙开启6379端口
+</span></span></code></pre></div><h3 id=整合-springboot>整合 springboot
+<a class=header-anchor href=#%e6%95%b4%e5%90%88-springboot></a></h3><p>jedis：采用的直连，多线程操作不安全，可以使用 jedis pool 连接池 更像 BIO
+lettuce：采用 netty,实例可以在多个线程之间共享 更像 NIO</p><blockquote><p>BIO NIO 的基本概念和区别？
+同步和异步： io 操作分为两个步骤 发起 IO 请求和实际 IO 操作，同步和异步的区别在于实际 IO 操作是否阻塞，异步不需要等待处理结果，
+阻塞和非阻塞： 阻塞就是要等待，非阻塞就是调用者不用等待，先去干别的事，有了结果再去通知调用者
+BIO(Blocking IO) 同步阻塞 IO,数据的读写必须阻塞在一个线程内等待其完成
+NIO(new IO) 同步非阻塞
+AIO(Asynchronous IO) 异步非阻塞
+当前 springboot 版本使用的 lettuce</p></blockquote><p>导入依赖</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#f92672>&lt;dependency&gt;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;groupId&gt;</span>org.springframework.boot<span style=color:#f92672>&lt;/groupId&gt;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span style=color:#f92672>&lt;/artifactId&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;/dependency&gt;</span>
+</span></span></code></pre></div><p>配置文件</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-properties data-lang=properties><span style=display:flex><span><span style=color:#75715e>#远程数据库的ip地址 </span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>spring.redis.host</span><span style=color:#f92672>=</span><span style=color:#e6db74>110.42.153.193</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#端口号</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>spring.redis.port</span><span style=color:#f92672>=</span><span style=color:#e6db74>6379</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#连接密码</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>spring.redis.password</span><span style=color:#f92672>=</span><span style=color:#e6db74>134567</span>
+</span></span></code></pre></div><p>使用RedisTemplate</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-java data-lang=java><span style=display:flex><span>  <span style=color:#a6e22e>@Autowired</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> RedisTemplate redisTemplate;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Test</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>contextLoads</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//几种数据类型的操作</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForValue(); </span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForList(); </span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForSet();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForHash();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForZSet();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForGeo();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForHyperLogLog();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        redisTemplate.opsForCluster(); //集群相关的</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//获取连接</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        connection.flushDb();</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//        connection.flushAll();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        redisTemplate.<span style=color:#a6e22e>opsForValue</span>().<span style=color:#a6e22e>set</span>(<span style=color:#e6db74>&#34;name&#34;</span>,<span style=color:#e6db74>&#34;监控&#34;</span>);
+</span></span><span style=display:flex><span>        System.<span style=color:#a6e22e>out</span>.<span style=color:#a6e22e>println</span>(redisTemplate.<span style=color:#a6e22e>opsForValue</span>().<span style=color:#a6e22e>get</span>(<span style=color:#e6db74>&#34;name&#34;</span>));
+</span></span><span style=display:flex><span>    }
+</span></span></code></pre></div><p>==redis 对象需要进行序列化==</p><blockquote><p>序列化的作用</p></blockquote><p>配置自己的 redisTemplate 并设置自己的序列化操作</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#a6e22e>@Configuration</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>RedisConfig</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@Bean</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>//自定义RedisTemplate</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> RedisTemplate<span style=color:#f92672>&lt;</span>String, Object<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>redisTemplate</span>(RedisConnectionFactory redisConnectionFactory) {
+</span></span><span style=display:flex><span>        RedisTemplate<span style=color:#f92672>&lt;</span>String, Object<span style=color:#f92672>&gt;</span> template <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> RedisTemplate();
+</span></span><span style=display:flex><span>        template.<span style=color:#a6e22e>setConnectionFactory</span>(redisConnectionFactory);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//Json序列化配置</span>
+</span></span><span style=display:flex><span>        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Jackson2JsonRedisSerializer(Object.<span style=color:#a6e22e>class</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//string的序列化</span>
+</span></span><span style=display:flex><span>        StringRedisSerializer stringRedisSerializer <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> StringRedisSerializer();
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//key 采用string的序列化方式</span>
+</span></span><span style=display:flex><span>        template.<span style=color:#a6e22e>setKeySerializer</span>(stringRedisSerializer);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//hash的key 采用string的序列化方式</span>
+</span></span><span style=display:flex><span>        template.<span style=color:#a6e22e>setHashKeySerializer</span>(stringRedisSerializer);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//value 采用jackson的序列化方式</span>
+</span></span><span style=display:flex><span>        template.<span style=color:#a6e22e>setValueSerializer</span>(jackson2JsonRedisSerializer);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//hash的value 采用jackson的序列化方式</span>
+</span></span><span style=display:flex><span>        template.<span style=color:#a6e22e>setHashValueSerializer</span>(jackson2JsonRedisSerializer);
+</span></span><span style=display:flex><span>        template.<span style=color:#a6e22e>afterPropertiesSet</span>();
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> template;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><blockquote><p>真实的开发中，有一个 redis 的工具类，封装了一些常用命令</p></blockquote><h3 id=redisconf-详解>Redis.conf 详解
+<a class=header-anchor href=#redisconf-%e8%af%a6%e8%a7%a3></a></h3><p>限制客户端连接</p><h3 id=redis-持久化策略>Redis 持久化策略
+<a class=header-anchor href=#redis-%e6%8c%81%e4%b9%85%e5%8c%96%e7%ad%96%e7%95%a5></a></h3><h5 id=rdbredis-database-快照>RDB(Redis DataBase) 快照
+<a class=header-anchor href=#rdbredis-database-%e5%bf%ab%e7%85%a7></a></h5><p>过程：
+Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个临时文件中，待持久化过程结束，再用这个临时文件替换上次持久化的文件，主进程不进行任何io操作，对数据恢复的完整型不是非常敏感。
+==保存的文件名 dump.rdb==
+缺点：最后一次持久化后的数据可能丢失</p><p>触发机制：</p><ol><li>满足 save 规则</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-vim data-lang=vim><span style=display:flex><span># <span style=color:#ae81ff>900</span>秒内修改一次
+</span></span><span style=display:flex><span><span style=color:#a6e22e>save</span> <span style=color:#ae81ff>900</span> <span style=color:#ae81ff>1</span>  
+</span></span><span style=display:flex><span># <span style=color:#ae81ff>300</span>秒内修改<span style=color:#ae81ff>10</span>次
+</span></span><span style=display:flex><span><span style=color:#a6e22e>save</span> <span style=color:#ae81ff>300</span> <span style=color:#ae81ff>10</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>save</span> <span style=color:#ae81ff>60</span> <span style=color:#ae81ff>10000</span>
+</span></span></code></pre></div><ol start=2><li>执行 flushall 命令</li><li>退出 redis</li></ol><p>如何恢复 rdb 文件，放到 redis 启动目录即可</p><h5 id=aofappendonlyfile>AOF(AppendOnlyFile)
+<a class=header-anchor href=#aofappendonlyfile></a></h5><p>将所有的命令全部记录下来（日志的形式）
+==保存的文件名 appendonly.aof==
+只记录写的操作，
+默认不开启，需要手动配置
+redis.config <code>appendonly设为yes</code></p><blockquote><p>如果 aof 文件有问题，会出现错误，启动不了 redis，需要修复 aof 文件<code>redis-check-aof --fix</code>
+如果正常，放到启动目录就可以恢复数据库</p></blockquote><p>同步策略</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-vim data-lang=vim><span style=display:flex><span># <span style=color:#a6e22e>appendfsync</span> <span style=color:#a6e22e>always</span> <span style=color:#a6e22e>每一次修改都同步</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>appendfsync</span> <span style=color:#a6e22e>everysec</span> <span style=color:#a6e22e>每秒同步一次</span>
+</span></span><span style=display:flex><span># <span style=color:#a6e22e>appendfsync</span> <span style=color:#a6e22e>no</span> <span style=color:#a6e22e>从不同步</span>
+</span></span></code></pre></div><p>优点：</p><ol><li>每一次修改都同步，文件的完整会更好</li><li>每秒同步一次，可能会丢失一秒数据</li><li>从不同步，性能最好
+缺点：</li><li>对比RDB,文件更大,修复速度也较慢</li><li>aof的运行效率比rdb慢，所以redis的默认配置是rdb持久化</li></ol><h3 id=redis发布订阅>Redis发布订阅
+<a class=header-anchor href=#redis%e5%8f%91%e5%b8%83%e8%ae%a2%e9%98%85></a></h3><p>原理：</p><h4 id=订阅端>订阅端
+<a class=header-anchor href=#%e8%ae%a2%e9%98%85%e7%ab%af></a></h4><p><code>psubscribe pattern[pattern...]</code>订阅一个或多个符合给定模式的频道
+<code>pubsub subcommand[argument]</code>查看订阅与发布系统状态
+<code>subscribe channel </code>订阅一个频道
+<code>unsubscribe channel</code> 退订频道
+<code>punsubscribe [pattern]</code> 退订所有给定模式的频道</p><h4 id=发布端>发布端
+<a class=header-anchor href=#%e5%8f%91%e5%b8%83%e7%ab%af></a></h4><p><code>publish channel message</code> 叫消息发布到指定频道</p><p>使用场景：实时消息系统；实时聊天系统
+复杂的场景：用消息中间件来实现</p><h3 id=redis主从复制>Redis主从复制
+<a class=header-anchor href=#redis%e4%b8%bb%e4%bb%8e%e5%a4%8d%e5%88%b6></a></h3><p>一台主节点(master/leader)Redis服务器上的数据复制到从节点(slave/follower)Redis服务器==数据的复制是单向的，只能从主节点到从节点==主节点以写为主，从节点以读为主
+==默认情况下，每台Redis服务器都是主节点==</p><h4 id=主从复制的作用>主从复制的作用
+<a class=header-anchor href=#%e4%b8%bb%e4%bb%8e%e5%a4%8d%e5%88%b6%e7%9a%84%e4%bd%9c%e7%94%a8></a></h4><ol><li>数据冗余：实现数据的热备份，是持久化之外的一种数据冗余方式</li><li>故障恢复：主节点出现问题时，可由从节点提供服务</li><li>负载均衡：读写分离。多个节点分担读负载</li><li>高可用基石：哨兵模式和集群实施的基础</li></ol><p>==一台Redis服务器的内存容量不要超过20G==</p><h4 id=环境配置>环境配置
+<a class=header-anchor href=#%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae></a></h4><p>只要配置从库，不用配置主库
+<code>info replication</code> 查看redis主从复制信息
+复制3个配置文件修改相应配置</p><ol><li>端口</li><li>pid</li><li>log文件名字</li><li>dump.rdb</li></ol><h4 id=一主二从>一主二从
+<a class=header-anchor href=#%e4%b8%80%e4%b8%bb%e4%ba%8c%e4%bb%8e></a></h4><p>认老大！ <code>slaveof host port</code>
+真实的主从复制应该在配置文件中配置，命令行只是暂时的
+只能在主机写，从机只能读</p><blockquote><p>复制原理
+只要==重新连接==到主机就会进行一次全量复制（master传送整个数据文件到slave,并完成一次完全同步）
+增量复制：master继续将新的所有收集到的修改命令依次传给slave，完成同步</p></blockquote><blockquote><p>层层链路
+一个从节点还有一个从节点
+如果主机宕机，那么该如何选出一个新的主机
+<code>slaveof no one</code> 使自己成为主节点，谋筹篡位</p></blockquote><h4 id=哨兵模式自动选举老大>哨兵模式（自动选举老大）
+<a class=header-anchor href=#%e5%93%a8%e5%85%b5%e6%a8%a1%e5%bc%8f%e8%87%aa%e5%8a%a8%e9%80%89%e4%b8%be%e8%80%81%e5%a4%a7></a></h4><p>步骤：</p><ol><li>配置哨兵配置文件 sentinel.conf</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># sentinel monitor 被监控的名称 host port 1 </span>
+</span></span><span style=display:flex><span>sentinel monitor myredis 127.0.0.1 <span style=color:#ae81ff>6379</span> <span style=color:#ae81ff>1</span>
+</span></span></code></pre></div><p>最后的这个1 代表主机挂了的时候，slave投票推选一个新主机，票数多的就会成为主机1
+2. 启动哨兵
+<code>redis-sentinel kconfig/sentinel.conf</code> 如果有多个哨兵，则需要有多个哨兵配置文件
+优点:</p><ol><li>哨兵集群，基于主从复制模式，所有的主从配置优点都有</li><li>主从可以切换，故障可以转移，系统的可用性更高</li><li>哨兵模式就是主从模式的升级，手动配置到自动，更加健壮</li></ol><p>缺点：</p><ol><li>Redis不好在线扩容，集群数量一旦达到上限，在线扩容十分麻烦</li><li>哨兵模式的配置很麻烦，里面会有很多选择</li></ol><h3 id=redis缓存穿透和雪崩>Redis缓存穿透和雪崩
+<a class=header-anchor href=#redis%e7%bc%93%e5%ad%98%e7%a9%bf%e9%80%8f%e5%92%8c%e9%9b%aa%e5%b4%a9></a></h3><blockquote><p>服务的高可用
+怎么将数据库中的数据存到缓存中？</p></blockquote><h4 id=缓存穿透查不到>缓存穿透（查不到）
+<a class=header-anchor href=#%e7%bc%93%e5%ad%98%e7%a9%bf%e9%80%8f%e6%9f%a5%e4%b8%8d%e5%88%b0></a></h4><p>解决方案：</p><ul><li>布隆过滤器</li><li>缓存空对象</li></ul><blockquote><p>存在的问题</p></blockquote><ol><li>缓存需要更多的空间存储更多的键</li><li>缓存层和存储层数据不一致</li></ol><h4 id=缓存击穿量太大缓存过期>缓存击穿（量太大，缓存过期）
+<a class=header-anchor href=#%e7%bc%93%e5%ad%98%e5%87%bb%e7%a9%bf%e9%87%8f%e5%a4%aa%e5%a4%a7%e7%bc%93%e5%ad%98%e8%bf%87%e6%9c%9f></a></h4><blockquote><p>解决方案</p></blockquote><ul><li>设置热点数据不过期</li><li>加互斥锁</li></ul><h4 id=缓存雪崩缓存集中过期失效redis宕机>缓存雪崩（缓存集中过期失效，redis宕机）
+<a class=header-anchor href=#%e7%bc%93%e5%ad%98%e9%9b%aa%e5%b4%a9%e7%bc%93%e5%ad%98%e9%9b%86%e4%b8%ad%e8%bf%87%e6%9c%9f%e5%a4%b1%e6%95%88redis%e5%ae%95%e6%9c%ba></a></h4><blockquote><p>解决方案</p></blockquote><ul><li>redis高可用，多设置几台redis搭建集群</li><li>限流降级，在缓存失效后，通过加锁或者队列来控制读数据库写缓存的线程数量</li><li>数据预热，把可能大量访问的数据加载到缓存中</li></ul></div><footer class=post-footer><div class=post-tags><a href=/tags/java>java</a></div><div class=addthis_inline_share_toolbox style=text-align:center></div><hr><div class=reward-container><div><i class="fa-solid fa-mug-hot"></i>请我喝杯咖啡吧 ヾ(^▽^*)))</div><button>
+赞赏</button><div class=post-reward><div class=post-reward-item><img src=/imgs/img-lazy-loading.gif data-src=/imgs/ali-pay.png alt="infiniteJK - 支付宝">
+<span>支付宝</span></div><div class=post-reward-item><img src=/imgs/img-lazy-loading.gif data-src=/imgs/wechat-pay.png alt="infiniteJK - 微信">
+<span>微信</span></div></div></div><div class=post-copyright><img src=/imgs/cc/cc.svg width=75 height=75 align=right alt=共享知识><ul><li class=post-copyright-title><strong>文章标题：</strong>
+Redis学习笔记</li><li class=post-copyright-author><strong>本文作者： </strong>infiniteJK</li><li class=post-copyright-link><strong>本文链接：</strong>
+<a id=post-cr-link href=https://infinitejk.github.io/post/redis/ title=Redis学习笔记>https://infinitejk.github.io/post/redis/</a></li><li class=post-copyright-license><strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <i class="fab fa-fw fa-creative-commons"></i><a target=_blank href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh>BY-NC-SA</a> 许可协议。转载请注明出处！</li></ul></div><div class=followme><span>欢迎关注我的其它发布渠道</span><div class=social-list><div class=social-item><a target=_blank class=social-link href=/images/wechat_channel.jpg><span class=icon><i class="fab fa-weixin"></i>
+</span><span class=label>WeChat</span></a></div><div class=social-item><a target=_blank class=social-link href=/atom.xml><span class=icon><i class="fa fa-rss"></i>
+</span><span class=label>RSS</span></a></div></div></div><div class=post-nav><div class="post-nav-next post-nav-item"><a href=/post/python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ rel=next title=Python学习笔记><i class="fa fa-chevron-left"></i> Python学习笔记</a></div><div class="post-nav-prev post-nav-item"><a href=/post/springboot/ rel=prev title=springboot>springboot
+<i class="fa fa-chevron-right"></i></a></div></div></footer></article></div></div></main><footer class=footer><div class=footer-inner><div id=gtranslate class=google-translate><i class="fa fa-language"></i><div id=google_translate_element></div></div><div class=copyright>&copy;
+<span itemprop=copyrightYear>2023 - 2024
+</span><span class=with-love><i class="fa fa-heart"></i>
+</span><span class=author itemprop=copyrightHolder>infiniteJK</span></div><div class=powered-by>由 <a href=https://gohugo.io title=0.125.6 target=_blank>Hugo</a> & <a href=https://github.com/hugo-next/hugo-theme-next title=4.5.3 target=_blank>Hugo NexT.Gemini</a> 强力驱动</div><div class=beian><a href=https://beian.miit.gov.cn target=_blank>粤ICP备 18047355-1 号</a>
+<img src=/imgs/gongan.png alt=沪公网安备>
+<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011402009770" target=_blank>沪公网安备 31011402009770 号</a></div><div class=vendors-list><a target=_blank href=https://vercel.com title=Vercel><img src=/imgs/img-lazy-loading.gif data-src=/imgs/vendors/vercel.svg alt=Vercel>
+</a><a target=_blank href=https://upyun.com title=又拍云><img src=/imgs/img-lazy-loading.gif data-src=/imgs/vendors/upyun.png alt=又拍云>
+</a><a target=_blank href=https://webify.cloudbase.net title=Webify>Webify
+</a><span>提供CDN/云资源支持</span></div></div></footer><script type=text/javascript src=https://cdn.staticfile.org/animejs/3.2.1/anime.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/viewerjs/1.11.0/viewer.min.js defer></script><script class=next-config data-name=main type=application/json>{"bookmark":{"color":"#222","enable":true,"save":"manual"},"copybtn":true,"darkmode":true,"giscus":{"cfg":{"category":"Comments","categoryid":null,"emit":false,"inputposition":"top","mapping":"title","reactions":false,"repo":"username/repo-name","repoid":null,"theme":"preferred_color_scheme"},"js":"https://giscus.app/client.js"},"hostname":"https://infinitejk.github.io/","i18n":{"ds_day":" 天前","ds_days":" 天 ","ds_hour":" 小时前","ds_hours":" 小时 ","ds_just":"刚刚","ds_min":" 分钟前","ds_mins":" 分钟","ds_month":" 个月前","ds_years":" 年 ","empty":"没有找到任何搜索结果：${query}","hits":"找到 ${hits} 个搜索结果","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","placeholder":"搜索..."},"lang":"zh-CN","lazyload":false,"localSearch":{"enable":true,"limit":1e3,"path":"/searchindexes.xml","preload":false,"topnperarticle":-1,"trigger":"auto","unescape":false},"motion":{"async":true,"enable":true,"transition":{"collheader":"fadeInLeft","postblock":"fadeIn","postbody":"fadeInDown","postheader":"fadeInDown","sidebar":"fadeInUp"}},"postmeta":{"comments":{"enable":true,"plugin":"waline"},"views":{"enable":true,"plugin":"busuanzi"}},"root":"/","scheme":"Gemini","sidebar":{"display":"post","offset":12,"padding":18,"position":"left","width":256},"vendor":{"plugins":"qiniu","router":"https://cdn.staticfile.org"},"version":"4.5.3","waline":{"cfg":{"emoji":false,"imguploader":false,"placeholder":"请文明发言哟 ヾ(≧▽≦*)o","reaction":true,"reactiontext":["点赞","踩一下","得意","不屑","尴尬","睡觉"],"reactiontitle":"你认为这篇文章怎么样？","requiredmeta":["nick","mail"],"serverurl":null,"sofa":"快来发表你的意见吧 (≧∀≦)ゞ","wordlimit":200},"css":{"alias":"waline","file":"dist/waline.css","name":"@waline/client","version":"2.13.0"},"js":{"alias":"waline","file":"dist/waline.js","name":"@waline/client","version":"2.13.0"}}}</script><script type=text/javascript src=/js/main.min.0fb3547374c917d23a2e5f762b70f3698d20b46a01cc18c38f9c467aeffc99fc.js defer></script></body></html>
